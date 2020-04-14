@@ -19,3 +19,20 @@ HTree* copyTree(HTree const cpyTree)
     tree->right = cpyTree.right;
     return tree;
 }
+
+char const* findCode(HTree const* tree, char const symbol)
+{
+    if (tree->sumbol == symbol)
+        return tree->code;
+    if (tree->left) {
+        char const* temp = findCode(tree->left, symbol);
+        if (temp)
+            return temp;
+    }
+    if (tree->right) {
+        char const* temp = findCode(tree->right, symbol);
+        if (temp)
+            return temp;
+    }
+    return NULL;
+}

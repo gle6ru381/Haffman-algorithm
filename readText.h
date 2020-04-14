@@ -7,5 +7,6 @@
 Vector* readFile(FILE* fin);
 HTree* makeTree(Vector* vec);
 void makeCode(HTree* tree);
+void compressFile(FILE* fin, HTree* tree);
 
 #endif

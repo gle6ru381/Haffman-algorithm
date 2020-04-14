@@ -72,3 +72,16 @@ void makeCode(HTree* tree)
         makeCode(tree->right);
     }
 }
+
+void compressFile(FILE* fin, HTree* tree)
+{
+    if (!fin) {
+        return;
+    }
+    while (!feof(fin)) {
+        char c = fgetc(fin);
+        char const* code = findCode(tree, c);
+        while (*code != 0) {
+        }
+    }
+}
