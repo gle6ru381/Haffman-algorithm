@@ -83,11 +83,13 @@ void compressFile(FILE* fin, FILE* fout, HTree* tree)
     unsigned size = 0;
     fwrite(&size, sizeof(unsigned), 1, fout);
     for (char i = 1; i < 127; i++) {
-        char const* str = findCode(tree, i);
-        if (str) {
-            size += strlen(str) + 2;
+        HTree const* temp = findCode(tree, i);
+        if (!temp)
+            continue;
+        if (temp->sumbol) {
+            size += sizeof(uint) + 1;
             fwrite(&i, sizeof(char), 1, fout);
-            fwrite(str, sizeof(char), strlen(str) + 1, fout);
+            fwrite(&temp->count, sizeof(uint), 1, fout);
         }
     }
     rewind(fout);
@@ -98,7 +100,7 @@ void compressFile(FILE* fin, FILE* fout, HTree* tree)
         char c = fgetc(fin);
         if (c < 0 || c > 127)
             continue;
-        char const* code = findCode(tree, c);
+        char const* code = findCode(tree, c)->code;
         while (*code != 0) {
             setBit(byte, *code++);
             if (byte->size == 8) {
@@ -115,64 +117,49 @@ void compressFile(FILE* fin, FILE* fout, HTree* tree)
 
 struct Pair {
     char symbol;
-    char code[22];
+    uint count;
 };
-
-char findSymbol(struct Pair pair[], char const* code)
-{
-    for (int i = 0; i < 127; i++) {
-        if (pair[i].symbol == 0)
-            break;
-        if (!strcmp(pair[i].code, code))
-            return pair[i].symbol;
-    }
-    return 0;
-}
 
 void decompressFile(FILE* fin, FILE* fout)
 {
     if (!fin || !fout)
         return;
-    unsigned countByte;
-    fread(&countByte, sizeof(unsigned), 1, fin);
+    unsigned byteCount = 0;
+    fread(&byteCount, sizeof(unsigned), 1, fin);
 
-    struct Pair pair[127];
-    int i = 0;
-    while (countByte) {
-        char symbol;
-        fread(&symbol, 1, 1, fin);
-        pair[i].symbol = symbol;
-        countByte--;
-
-        char codeByte = 0;
-        int j = 0;
-        do {
-            fread(&codeByte, 1, 1, fin);
-            pair[i].code[j] = codeByte;
-            j++;
-            countByte--;
-        } while (codeByte != 0);
-        i++;
+    Vector* vector = init_vector();
+    while (byteCount > 0) {
+        struct Pair pair;
+        fread(&pair.symbol, sizeof(char), 1, fin);
+        fread(&pair.count, sizeof(uint), 1, fin);
+        byteCount -= sizeof(char);
+        byteCount -= sizeof(uint);
+        vector_push_back(vector, newTree(pair.symbol, pair.count));
     }
-    char* code = malloc(sizeof(char));
+    vector_sort(vector);
+    HTree* tree = makeTree(vector);
+    makeCode(tree);
+
     Byte* byte;
+    char const* code;
     char subCode[22] = {0};
-    int i1 = 0;
-    int i2 = 8;
+    uchar i1 = 0;
+    uchar i2 = 8;
+
     while (!feof(fin)) {
         if (i2 == 8) {
-            free(code);
-            byte = readByte(fin);
+            byte = byte_init();
+            byte->bit = fgetc(fin);
+            byte->size = 7;
             code = toString(byte);
-            free(byte);
             i2 = 0;
         }
         subCode[i1] = code[i2];
-        char sym = findSymbol(pair, subCode);
-        if (sym) {
-            fputc(sym, fout);
-            for (int j = 0; j <= i1; j++) {
-                subCode[j] = 0;
+        char symbol = treeFindSymbol(tree, subCode, 0);
+        if (symbol) {
+            fputc(symbol, fout);
+            for (int i = 0; i <= i1; i++) {
+                subCode[i] = 0;
             }
             i1 = 0;
             i2++;

@@ -20,19 +20,42 @@ HTree* copyTree(HTree const cpyTree)
     return tree;
 }
 
-char const* findCode(HTree const* tree, char const symbol)
+HTree const* findCode(HTree const* tree, char const symbol)
 {
     if (tree->sumbol == symbol)
-        return tree->code;
+        return tree;
     if (tree->left) {
-        char const* temp = findCode(tree->left, symbol);
+        HTree const* temp = findCode(tree->left, symbol);
         if (temp)
             return temp;
     }
     if (tree->right) {
-        char const* temp = findCode(tree->right, symbol);
+        HTree const* temp = findCode(tree->right, symbol);
         if (temp)
             return temp;
     }
     return NULL;
+}
+
+char treeFindSymbol(HTree* tree, char const* code, uchar ind)
+{
+    if (!strcmp(tree->code, code) && tree->count) {
+        tree->count--;
+        return tree->sumbol;
+    }
+    if (code[ind] == '0') {
+        if (tree->left) {
+            char temp = treeFindSymbol(tree->left, code, ind + 1);
+            if (temp)
+                return temp;
+        }
+    }
+    if (code[ind] == '1') {
+        if (tree->right) {
+            char temp = treeFindSymbol(tree->right, code, ind + 1);
+            if (temp)
+                return temp;
+        }
+    }
+    return 0;
 }

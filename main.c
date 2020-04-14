@@ -19,6 +19,7 @@ int main()
     fclose(fin);
     fin = fopen("abc.dat", "rb");
     fout = fopen("result.txt", "w");
+    printf("\n\n");
     decompressFile(fin, fout);
 
     return 0;

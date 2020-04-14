@@ -20,7 +20,7 @@ void setBit(Byte* byte, char bit)
 
 char* toString(Byte* byte)
 {
-    char* str = calloc(8, sizeof(char));
+    char* str = calloc(9, sizeof(char));
     if (!str)
         return NULL;
     for (int i = 0; i < 8; i++) {

@@ -15,6 +15,6 @@ typedef struct HTree HTree;
 
 HTree* newTree(const char value, const uint count);
 HTree* copyTree(HTree const cpyTree);
-char const* findCode(HTree const* tree, char const symbol);
-
+HTree const* findCode(HTree const* tree, char const symbol);
+char treeFindSymbol(HTree* tree, char const* code, uchar ind);
 #endif
