@@ -4,7 +4,7 @@
 
 HTree* newTree(const char value, const uint count)
 {
-    HTree* tree = malloc(sizeof(HTree));
+    HTree* tree = calloc(1, sizeof(HTree));
     tree->left = NULL;
     tree->right = NULL;
     tree->count = count;
