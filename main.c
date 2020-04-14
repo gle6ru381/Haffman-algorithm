@@ -10,7 +10,6 @@ int main()
     HTree* total = makeTree(vec);
     vector_free(vec);
     makeCode(total);
-    printf("\n%s", findCode(total, '='));
 
     return 0;
 }
