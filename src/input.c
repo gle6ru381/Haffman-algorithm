@@ -34,17 +34,16 @@ Data createData(int argc, char** argv)
                         argv[i + 1]);
                 i++;
             }
-        }
-        if (!strcmp(argv[i], "-c")) {
+        } else if (!strcmp(argv[i], "-c")) {
             if (operation != O_None) {
                 Error("Double definition operation type");
             }
             operation = O_Compress;
-        }
-        if (!strcmp(argv[i], "-d")) {
+        } else if (!strcmp(argv[i], "-d")) {
             if (operation != O_None) {
                 Error("Double definition operation type");
             }
+            operation = O_Decompress;
         } else {
             if (inputFileName) {
                 Error("Double definition input file");
