@@ -14,6 +14,7 @@ int main(int argc, char** argv)
         if (!fin) {
             Error("Input file not open");
         }
+        free(data.inputFileName);
         Vector* vec = readFile(fin);
         vector_sort(vec);
         HTree* total = makeTree(vec);
@@ -25,32 +26,20 @@ int main(int argc, char** argv)
         if (!fout) {
             Error("Output file not open");
         }
+        free(data.outputFileName);
         compressFile(fin, fout, total);
     } else {
         FILE* fin = fopen(data.inputFileName, "rb");
         if (!fin) {
             Error("Input file not open");
         }
+        free(data.inputFileName);
         FILE* fout = fopen(data.outputFileName, "w");
+        if (!fin) {
+            Error("Ouput file not open");
+        }
+        free(data.outputFileName);
         decompressFile(fin, fout);
     }
-    /*   FILE* fin = fopen("one.txt", "r");
-       Vector* vec = readFile(fin);
-       vector_sort(vec);
-       HTree* total = makeTree(vec);
-       vector_free(vec);
-       makeCode(total);
-
-       rewind(fin);
-       FILE* fout = fopen("abc.dat", "wb");
-
-       compressFile(fin, fout, total);
-       fclose(fout);
-       fclose(fin);
-       fin = fopen("abc.dat", "rb");
-       fout = fopen("result.txt", "w");
-       printf("\n\n");
-       decompressFile(fin, fout);
-   */
     return 0;
 }

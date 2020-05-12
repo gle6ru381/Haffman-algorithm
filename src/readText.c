@@ -55,21 +55,11 @@ void makeCode(HTree* tree)
     if (tree->left) {
         strcpy(tree->left->code, tree->code);
         strcat(tree->left->code, "0");
-        if (tree->left->sumbol != '\r') {
-            printf("code: %s\tsymbol: %c\n",
-                   tree->left->code,
-                   tree->left->sumbol);
-        }
         makeCode(tree->left);
     }
     if (tree->right) {
         strcpy(tree->right->code, tree->code);
         strcat(tree->right->code, "1");
-        if (tree->right->sumbol != '\r') {
-            printf("code: %s\tsymbol: %c\n",
-                   tree->right->code,
-                   tree->right->sumbol);
-        }
         makeCode(tree->right);
     }
 }

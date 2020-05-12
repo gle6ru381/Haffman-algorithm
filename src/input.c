@@ -56,11 +56,20 @@ Data createData(int argc, char** argv)
     if (operation == O_None) {
         Error("Operation not declared");
     }
-    if (!outputFileName) {
-        Error("Output file not declared");
-    }
     if (!inputFileName) {
         Error("Input file not declared");
+    }
+    if (!outputFileName) {
+        uint length = strlen(inputFileName);
+        outputFileName = malloc(length * sizeof(char) + 3);
+        uint i = 0;
+        for (; inputFileName[i] != '.'; i++) {
+            outputFileName[i] = inputFileName[i];
+        }
+        if (operation == O_Compress)
+            memcpy(outputFileName + i, ".dat", 5);
+        else
+            memcpy(outputFileName + i, ".txt", 5);
     }
     Data data = {outputFileName, inputFileName, operation};
 
