@@ -13,7 +13,7 @@ Vector* init_vector()
     return vec;
 }
 
-bool vector_push_back(Vector* vec, HTree* tree)
+bool vector_push_back(Vector* vec, HTree* const tree)
 {
     if (vec->size == vec->capacity) {
         HTree* temp = realloc(vec->array, (vec->capacity + 10) * sizeof(HTree));
@@ -33,7 +33,7 @@ void swap(HTree* first, HTree* second)
     *second = temp;
 }
 
-void vector_sort(Vector* vec)
+void vector_sort(Vector* const vec)
 {
     for (int i = 0; i < vec->size; i++) {
         for (int j = 0; j < vec->size - 1; j++) {

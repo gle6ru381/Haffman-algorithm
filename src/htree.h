@@ -7,14 +7,14 @@ struct HTree {
     struct HTree* left;
     struct HTree* right;
     char sumbol;
-    uint count;
     char code[22];
+    uint count;
 };
 
 typedef struct HTree HTree;
 
-HTree* newTree(const char value, const uint count);
-HTree* copyTree(HTree const cpyTree);
-HTree const* findCode(HTree const* tree, char const symbol);
-char treeFindSymbol(HTree* tree, char const* code, uchar ind);
+HTree* newTree(const char value, const uint* const count);
+HTree* copyTree(HTree const* const cpyTree);
+HTree const* findCode(HTree const* const tree, char const symbol);
+char treeFindSymbol(HTree* const tree, char const* const code, uchar const ind);
 #endif

@@ -12,7 +12,7 @@ struct Byte {
 typedef struct Byte Byte;
 
 Byte* byte_init();
-void setBit(Byte* byte, char bit);
-char* toString(Byte* byte);
+void setBit(Byte* byte, char const bit);
+char* toString(Byte const* const byte);
 Byte* readByte(FILE* fin);
 #endif

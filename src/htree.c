@@ -2,25 +2,25 @@
 #include <malloc.h>
 #include <stddef.h>
 
-HTree* newTree(const char value, const uint count)
+HTree* newTree(const char value, const uint* const count)
 {
     HTree* tree = calloc(1, sizeof(HTree));
     tree->left = NULL;
     tree->right = NULL;
-    tree->count = count;
+    tree->count = *count;
     tree->sumbol = value;
     return tree;
 }
 
-HTree* copyTree(HTree const cpyTree)
+HTree* copyTree(HTree const* const cpyTree)
 {
-    HTree* tree = newTree(cpyTree.sumbol, cpyTree.count);
-    tree->left = cpyTree.left;
-    tree->right = cpyTree.right;
+    HTree* tree = newTree(cpyTree->sumbol, &cpyTree->count);
+    tree->left = cpyTree->left;
+    tree->right = cpyTree->right;
     return tree;
 }
 
-HTree const* findCode(HTree const* tree, char const symbol)
+HTree const* findCode(HTree const* const tree, char const symbol)
 {
     if (tree->sumbol == symbol)
         return tree;
@@ -37,7 +37,7 @@ HTree const* findCode(HTree const* tree, char const symbol)
     return NULL;
 }
 
-char treeFindSymbol(HTree* tree, char const* code, uchar ind)
+char treeFindSymbol(HTree* const tree, char const* const code, uchar const ind)
 {
     if (!strcmp(tree->code, code) && tree->count) {
         tree->count--;

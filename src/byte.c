@@ -12,13 +12,13 @@ Byte* byte_init()
     return byte;
 }
 
-void setBit(Byte* byte, char bit)
+void setBit(Byte* byte, char const bit)
 {
     byte->bit |= ((bit - '0') << (7 - byte->size));
     byte->size++;
 }
 
-char* toString(Byte* byte)
+char* toString(Byte const* const byte)
 {
     char* str = calloc(9, sizeof(char));
     if (!str)

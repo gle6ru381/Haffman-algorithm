@@ -17,21 +17,21 @@ Vector* readFile(FILE* fin)
     }
     for (int i = 0; i < CHARCOUNT; i++) {
         if (count[i]) {
-            vector_push_back(vector, newTree(i, count[i]));
+            vector_push_back(vector, newTree(i, &count[i]));
         }
     }
     return vector;
 }
 
-HTree* makeTree(Vector* vec)
+HTree* makeTree(Vector* const vec)
 {
     HTree* temp = malloc(sizeof(HTree));
     temp->count
             = vec->array[vec->size - 1].count + vec->array[vec->size - 2].count;
     temp->code[0] = '\0';
     temp->sumbol = '\0';
-    temp->left = copyTree(vec->array[vec->size - 1]);
-    temp->right = copyTree(vec->array[vec->size - 2]);
+    temp->left = copyTree(&vec->array[vec->size - 1]);
+    temp->right = copyTree(&vec->array[vec->size - 2]);
 
     if (vec->size == 2)
         return temp;
@@ -50,7 +50,7 @@ HTree* makeTree(Vector* vec)
     return makeTree(vec);
 }
 
-void makeCode(HTree* tree)
+void makeCode(HTree* const tree)
 {
     if (tree->left) {
         strcpy(tree->left->code, tree->code);
@@ -124,7 +124,7 @@ void decompressFile(FILE* fin, FILE* fout)
         fread(&pair.count, sizeof(uint), 1, fin);
         byteCount -= sizeof(char);
         byteCount -= sizeof(uint);
-        vector_push_back(vector, newTree(pair.symbol, pair.count));
+        vector_push_back(vector, newTree(pair.symbol, &pair.count));
     }
     vector_sort(vector);
     HTree* tree = makeTree(vector);

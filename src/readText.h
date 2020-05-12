@@ -5,8 +5,8 @@
 #include <stdio.h>
 
 Vector* readFile(FILE* fin);
-HTree* makeTree(Vector* vec);
-void makeCode(HTree* tree);
+HTree* makeTree(Vector* const vec);
+void makeCode(HTree* const tree);
 void compressFile(FILE* fin, FILE* fout, HTree* tree);
 void decompressFile(FILE* fin, FILE* fout);
 

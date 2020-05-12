@@ -14,8 +14,8 @@ struct Vector {
 typedef struct Vector Vector;
 
 Vector* init_vector();
-bool vector_push_back(Vector* vec, HTree* tree);
-void vector_sort(Vector* vector);
+bool vector_push_back(Vector* vec, HTree* const tree);
+void vector_sort(Vector* const vector);
 void vector_free(Vector* vector);
 
 #endif
