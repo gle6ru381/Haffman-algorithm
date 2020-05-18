@@ -17,7 +17,8 @@ Vector* readFile(FILE* fin)
     }
     for (int i = 0; i < CHARCOUNT; i++) {
         if (count[i]) {
-            vector_push_back(vector, newTree(i, &count[i]));
+            if (!vector_push_back(vector, newTree(i, &count[i])))
+                return NULL;
         }
     }
     return vector;
@@ -72,7 +73,7 @@ void compressFile(FILE* fin, FILE* fout, HTree* tree)
 
     unsigned size = 0;
     fwrite(&size, sizeof(unsigned), 1, fout);
-    for (char i = 1; i < 127; i++) {
+    for (char i = 0; i < 127; i++) {
         HTree const* temp = findCode(tree, i);
         if (!temp)
             continue;
@@ -122,7 +123,7 @@ void decompressFile(FILE* fin, FILE* fout)
         struct Pair pair;
         fread(&pair.symbol, sizeof(char), 1, fin);
         fread(&pair.count, sizeof(uint), 1, fin);
-        byteCount -= sizeof(char);
+        byteCount -= 1;
         byteCount -= sizeof(uint);
         vector_push_back(vector, newTree(pair.symbol, &pair.count));
     }
@@ -130,7 +131,7 @@ void decompressFile(FILE* fin, FILE* fout)
     HTree* tree = makeTree(vector);
     makeCode(tree);
 
-    Byte* byte;
+    Byte* byte = byte_init();
     char const* code;
     char subCode[22] = {0};
     uchar i1 = 0;
@@ -138,9 +139,8 @@ void decompressFile(FILE* fin, FILE* fout)
 
     while (!feof(fin)) {
         if (i2 == 8) {
-            byte = byte_init();
-            byte->bit = fgetc(fin);
-            byte->size = 7;
+            free(byte);
+            byte = readByte(fin);
             code = toString(byte);
             i2 = 0;
         }

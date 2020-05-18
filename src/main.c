@@ -16,6 +16,9 @@ int main(int argc, char** argv)
         }
         free(data.inputFileName);
         Vector* vec = readFile(fin);
+        if (!vec) {
+            Error("bad alloc");
+        }
         vector_sort(vec);
         HTree* total = makeTree(vec);
         vector_free(vec);
